@@ -87,8 +87,11 @@ def lr_at(step, warmup, total, lr_max, lr_min):
 def save_ckpt(path: Path, model, opt, step, best_val, cfg, args):
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(".tmp")
+    # DataParallel prefixes every key with "module.". Strip it so a checkpoint
+    # trained on two GPUs still loads into a plain model on the laptop.
+    core = model.module if hasattr(model, "module") else model
     torch.save({
-        "model": model.state_dict(),
+        "model": core.state_dict(),
         "optimizer": opt.state_dict(),      # Adam moments — dropping these
                                             # causes a visible loss spike on resume
         "step": step,
@@ -104,7 +107,8 @@ def save_ckpt(path: Path, model, opt, step, best_val, cfg, args):
 
 def load_ckpt(path: Path, model, opt, device):
     ck = torch.load(path, map_location=device)
-    model.load_state_dict(ck["model"])
+    core = model.module if hasattr(model, "module") else model
+    core.load_state_dict(ck["model"])
     if opt is not None and "optimizer" in ck:
         opt.load_state_dict(ck["optimizer"])
     if "torch_rng" in ck:
@@ -124,7 +128,7 @@ def evaluate(model, data, batch_size, iters, ctx):
         x, y = data.batch(batch_size)
         with ctx:
             _, loss = model(x, targets=y)
-        losses.append(loss.item())
+        losses.append(loss.mean().item())   # .mean() for the DataParallel case
     model.train()
     return sum(losses) / len(losses)
 
@@ -151,6 +155,8 @@ def main():
     ap.add_argument("--ckpt-every", type=int, default=500)
     ap.add_argument("--log-every", type=int, default=10)
     ap.add_argument("--compile", action="store_true")
+    ap.add_argument("--single-gpu", action="store_true",
+                    help="ignore extra GPUs; use if DataParallel misbehaves")
     args = ap.parse_args()
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -192,6 +198,15 @@ def main():
     if args.compile:
         model = torch.compile(model)
 
+    # Kaggle hands out two T4s. DataParallel is the crude way to use both — it
+    # replicates the model each step and gathers gradients on GPU 0 — but it is
+    # one line and works inside a notebook, whereas DDP needs a process launcher
+    # that Kaggle notebooks make awkward. Expect ~1.7x, not 2x.
+    n_gpu = 0 if args.single_gpu else (torch.cuda.device_count() if device == "cuda" else 0)
+    if n_gpu > 1:
+        print(f"using {n_gpu} GPUs via DataParallel")
+        model = torch.nn.DataParallel(model)
+
     tokens_per_step = args.batch_size * args.grad_accum * cfg.block_size
     print(f"tokens/step: {tokens_per_step:,}   "
           f"total: {tokens_per_step * args.max_steps / 1e9:.2f}B")
@@ -214,7 +229,9 @@ def main():
             x, y = train_data.batch(args.batch_size)
             with ctx:
                 _, loss = model(x, targets=y)
-                loss = loss / args.grad_accum
+                # DataParallel returns one loss per GPU; mean() collapses it
+                # back to a scalar. On a single device this is a no-op.
+                loss = loss.mean() / args.grad_accum
             scaler.scale(loss).backward()
 
         if args.grad_clip > 0:

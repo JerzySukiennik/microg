@@ -1,0 +1,62 @@
+"""
+Kaggle cell 1 of 2 — build the token binaries.
+
+Run this ONCE. It downloads the corpus and packs it into pl_train.bin /
+pl_val.bin under /kaggle/working, which you then save as a Dataset and feed to
+the training notebook. Doing it here rather than uploading from home is
+deliberate: Kaggle's connection is fast, a domestic upload of ~3.8 GB is not.
+
+Settings: GPU off (this stage is CPU only), Internet ON.
+Expect roughly an hour.
+"""
+
+import os
+import subprocess
+import sys
+
+REPO = "https://github.com/JerzySukiennik/microg.git"
+WORK = "/kaggle/working"
+
+# --- code -------------------------------------------------------------------
+if not os.path.exists(f"{WORK}/microg"):
+    subprocess.run(["git", "clone", "--depth", "1", REPO, f"{WORK}/microg"], check=True)
+os.chdir(f"{WORK}/microg")
+subprocess.run([sys.executable, "-m", "pip", "install", "-q", "datasets", "tokenizers"], check=True)
+
+# --- corpus -----------------------------------------------------------------
+# A Hugging Face token lifts the anonymous rate limit. Put it in Kaggle's
+# "Add-ons -> Secrets" as HF_TOKEN; without it this still works, just slower.
+try:
+    from kaggle_secrets import UserSecretsClient
+    os.environ["HF_TOKEN"] = UserSecretsClient().get_secret("HF_TOKEN")
+    print("HF token loaded from Kaggle secrets")
+except Exception as e:
+    print(f"no HF token ({type(e).__name__}) — downloading anonymously, slower")
+
+subprocess.run([sys.executable, "data/fetch_corpus.py", "wiki",
+                "--out", f"{WORK}/corpus_wiki.txt"], check=True)
+subprocess.run([sys.executable, "data/fetch_corpus.py", "fineweb",
+                "--out", f"{WORK}/corpus_web.txt", "--max-chars", "6e9"], check=True)
+
+# --- tokenizer --------------------------------------------------------------
+# Prefer the mixed-corpus tokenizer if the repo has it; fall back to v1.
+TOK = "data/tokenizer-v2.json" if os.path.exists("data/tokenizer-v2.json") else "data/tokenizer.json"
+print(f"tokenizer: {TOK}")
+
+# --- pack -------------------------------------------------------------------
+subprocess.run([sys.executable, "data/pack_data.py",
+                f"{WORK}/corpus_wiki.txt", f"{WORK}/corpus_web.txt",
+                "--tokenizer", TOK,
+                "--out-prefix", f"{WORK}/pl"], check=True)
+
+# The raw text is ~9 GB and Kaggle's output quota is 20 GB. The binaries are
+# all the training run needs, so drop the text before saving the notebook.
+for f in ("corpus_wiki.txt", "corpus_web.txt"):
+    os.remove(f"{WORK}/{f}")
+
+subprocess.run(["cp", TOK, f"{WORK}/tokenizer.json"], check=True)
+print("\ndone — save this notebook's output as a Dataset named 'microg-data'")
+for f in sorted(os.listdir(WORK)):
+    p = f"{WORK}/{f}"
+    if os.path.isfile(p):
+        print(f"  {f}  {os.path.getsize(p)/1e9:.2f} GB")
