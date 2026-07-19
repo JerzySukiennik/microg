@@ -1,0 +1,21 @@
+# secrets — never commit
+.env
+
+# environment
+.venv/
+
+# corpora and derived binaries (gigabytes, regenerable from scripts)
+data/*.txt
+data/*.bin
+data/*.idx
+
+# checkpoints (hundreds of MB each)
+checkpoints/
+
+# internal / scratch
+Niepotrzebne/
+
+# python
+__pycache__/
+*.pyc
+.DS_Store
