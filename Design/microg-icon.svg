@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="MicroG">
+  <title>MicroG</title>
+  <!--
+    macOS app icon. The rounded square is drawn in, not left to the OS: .icns
+    files are not masked, so an unshaped mark would sit naked on the desktop.
+    824x824 inside 1024 is Apple's own content box for Big Sur-era icons.
+    The mark is scaled to 440 wide and optically centred on the glyph bounding
+    box (x 52.5-257.5, y 43.5-190.5), not on the SVG viewBox.
+  -->
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="#0d0d0f"/>
+  <rect x="100.5" y="100.5" width="823" height="823" rx="184.5"
+        fill="none" stroke="#ffffff" stroke-opacity=".10" stroke-width="1"/>
+  <g transform="translate(179.4,260.9) scale(2.146)">
+    <g fill="none" stroke="#fff" stroke-width="15" stroke-linecap="butt" stroke-linejoin="round" transform="translate(0,11)">
+      <path d="M60 74 L60 172"/>
+      <path d="M60 104 Q60 140 96 140 Q132 140 132 104 L132 74"/>
+      <path d="M243 62 a50 50 0 1 0 0 56 V90 H200"/>
+    </g>
+  </g>
+</svg>

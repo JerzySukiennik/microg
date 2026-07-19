@@ -1,5 +1,5 @@
 """
-gzowo-lm — a ~117M parameter decoder-only transformer, written from scratch.
+MicroG — a ~117M parameter decoder-only transformer, written from scratch.
 
 Architecture is GPT-2 sized but modernised (this is essentially Llama in miniature):
   - RoPE instead of learned positional embeddings
