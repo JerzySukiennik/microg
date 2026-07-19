@@ -1,0 +1,180 @@
+<meta charset="utf-8">
+<title>MicroG — µG execution</title>
+<style>
+  :root{
+    --bg:#000;--ink:#fff;
+    --g1:rgba(255,255,255,.07);--g2:rgba(255,255,255,.16);
+    --g3:rgba(255,255,255,.36);--g4:rgba(255,255,255,.64);
+    --mono:ui-monospace,"SF Mono",Menlo,monospace;
+    --sans:"Inter",-apple-system,system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+       -webkit-font-smoothing:antialiased;padding:56px 40px 110px}
+  .wrap{max-width:1120px;margin:0 auto}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+           text-transform:uppercase;color:var(--g3);margin:0 0 16px}
+  h1{font-size:clamp(1.9rem,4vw,2.9rem);line-height:1.03;letter-spacing:-.035em;
+     font-weight:600;margin:0 0 14px}
+  .sub{color:var(--g4);font-size:15px;line-height:1.62;max-width:58ch;margin:0 0 64px}
+
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px}
+  @media(max-width:860px){.grid{grid-template-columns:1fr}}
+  .card{border:1px solid var(--g1);border-radius:18px;background:rgba(255,255,255,.015);
+        padding:32px 30px 26px;position:relative}
+  .card.pick{border-color:rgba(255,255,255,.24)}
+  .tag{position:absolute;top:17px;right:19px;font-family:var(--mono);font-size:10px;
+       letter-spacing:.12em;color:var(--g3);text-transform:uppercase}
+  .card.pick .tag{color:var(--ink)}
+  .stage{height:190px;display:flex;align-items:center;justify-content:center;margin-bottom:22px}
+  h2{font-size:16.5px;font-weight:600;letter-spacing:-.012em;margin:0 0 8px}
+  .why{font-size:13.5px;line-height:1.62;color:var(--g4);margin:0}
+  .scale{display:flex;align-items:flex-end;gap:22px;margin-top:20px;
+         padding-top:18px;border-top:1px solid var(--g1)}
+  .scale>div{display:flex;flex-direction:column;align-items:center}
+  .lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--g2);
+       text-transform:uppercase;margin-top:7px}
+
+  .row{margin-top:72px;border-top:1px solid var(--g1);padding-top:48px}
+  .icons{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+  .icon{width:112px;height:112px;border-radius:25px;display:flex;align-items:center;
+        justify-content:center;background:#0d0d0f;border:1px solid var(--g1)}
+  .icon.inv{background:#fff}
+  .lock{display:flex;align-items:center;gap:22px;padding:30px 0}
+  .wordmark{font-size:30px;font-weight:600;letter-spacing:-.03em}
+  .wordmark .m{color:var(--g4);font-weight:400}
+  .slogan{font-family:var(--mono);font-size:12px;color:var(--g3);margin-top:5px}
+  .divider{width:1px;height:44px;background:var(--g1)}
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">MicroG · monogram µG · wykonania</p>
+  <h1>Ta sama idea,<br>cztery rysunki.</h1>
+  <p class="sub">Wybrałeś monogram. Poniżej jego cztery wykonania — różnią się tym, co w monogramie decyduje o wszystkim: relacją descendera µ do podstawy G, grubością kreski i tym, czy znaki stoją obok siebie, czy są zrośnięte. Wariant A to punkt odniesienia: zwykły tekst krojem Inter.</p>
+
+<div class="grid">
+  <div class="card">
+    <span class="tag">A · odniesienie</span>
+    <div class="stage">
+      <svg width="230" height="150" viewBox="0 0 300 190" role="img" aria-label="Monogram µG krojem Inter">
+        <text x="150" y="132" text-anchor="middle" font-family="Inter,system-ui,sans-serif"
+              font-size="128" font-weight="500" letter-spacing="-8" fill="#fff">µG</text>
+      </svg>
+    </div>
+    <h2>A — Inter, ciasny tracking</h2>
+    <p class="why">To, co widziałeś wcześniej: dwa znaki z gotowego kroju. µ jest wyraźnie lżejsze i mniejsze od G, bo krój rysowano do tekstu, nie do znaku firmowego. Descender wisi bez uzasadnienia. Działa, ale nikt nie pomyśli, że to zaprojektowano.</p>
+    <div class="scale">
+      <div><svg width="52" height="52" viewBox="0 0 300 190"><text x="150" y="132" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="128" font-weight="500" letter-spacing="-8" fill="#fff">µG</text></svg><span class="lbl">52</span></div>
+      <div><svg width="30" height="30" viewBox="0 0 300 190"><text x="150" y="132" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="128" font-weight="500" letter-spacing="-8" fill="#fff">µG</text></svg><span class="lbl">30</span></div>
+      <div><svg width="18" height="18" viewBox="0 0 300 190"><text x="150" y="132" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="128" font-weight="500" letter-spacing="-8" fill="#fff">µG</text></svg><span class="lbl">18</span></div>
+    </div>
+  </div>
+
+  <div class="card pick">
+    <span class="tag">B · rekomendacja</span>
+    <div class="stage"><svg class="v-b" width="230" height="150" viewBox="0 0 300 190" role="img" aria-label="Monogram µG rysowany monolinią"></svg></div>
+    <h2>B — Monolinia geometryczna</h2>
+    <p class="why">Rysowane od zera: jedna grubość kreski dla obu znaków, G zbudowane na czystym okręgu, µ na tej samej siatce. Descender µ i poprzeczka G leżą na wspólnych liniach, więc znak trzyma się jak konstrukcja, nie jak dwie litery obok siebie. Estetyka przyrządu, nie kroju tekstowego.</p>
+    <div class="scale">
+      <div><svg class="v-b" width="52" height="52" viewBox="0 0 300 190"></svg><span class="lbl">52</span></div>
+      <div><svg class="v-b" width="30" height="30" viewBox="0 0 300 190"></svg><span class="lbl">30</span></div>
+      <div><svg class="v-b" width="18" height="18" viewBox="0 0 300 190"></svg><span class="lbl">18</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="tag">C</span>
+    <div class="stage"><svg class="v-c" width="230" height="150" viewBox="0 0 300 190" role="img" aria-label="Monogram µG ze wspólnym pionem"></svg></div>
+    <h2>C — Zrośnięty</h2>
+    <p class="why">Prawy pion µ jest jednocześnie lewą krawędzią G — znaki dzielą jedną kreskę. Zwarte, zapadające w pamięć, bardzo „monogramowe". Ryzyko: przy małych rozmiarach zlewa się w jeden nieczytelny kształt, a µ przestaje być rozpoznawalne.</p>
+    <div class="scale">
+      <div><svg class="v-c" width="52" height="52" viewBox="0 0 300 190"></svg><span class="lbl">52</span></div>
+      <div><svg class="v-c" width="30" height="30" viewBox="0 0 300 190"></svg><span class="lbl">30</span></div>
+      <div><svg class="v-c" width="18" height="18" viewBox="0 0 300 190"></svg><span class="lbl">18</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="tag">D</span>
+    <div class="stage"><svg class="v-d" width="230" height="150" viewBox="0 0 300 190" role="img" aria-label="Monogram µG z podziałką pomiarową"></svg></div>
+    <h2>D — Monolinia z podziałką</h2>
+    <p class="why">Wariant B plus cztery znaczniki na osiach — ślad przyrządu pomiarowego, spójny z estetyką całej apki. Daje znakowi charakter bez dokładania koloru czy ozdoby. Minus: przy 18 px podziałka znika i zostaje wariant B, więc dokłada złożoność, która nie zawsze pracuje.</p>
+    <div class="scale">
+      <div><svg class="v-d" width="52" height="52" viewBox="0 0 300 190"></svg><span class="lbl">52</span></div>
+      <div><svg class="v-d" width="30" height="30" viewBox="0 0 300 190"></svg><span class="lbl">30</span></div>
+      <div><svg class="v-d" width="18" height="18" viewBox="0 0 300 190"></svg><span class="lbl">18</span></div>
+    </div>
+  </div>
+</div>
+
+<section class="row">
+  <p class="eyebrow">Ikona aplikacji — wariant B</p>
+  <div class="icons">
+    <div class="icon"><svg class="v-b" width="74" height="74" viewBox="0 0 300 190"></svg></div>
+    <div class="icon inv"><svg class="v-b-dark" width="74" height="74" viewBox="0 0 300 190"></svg></div>
+    <div class="icon" style="width:64px;height:64px;border-radius:15px"><svg class="v-b" width="42" height="42" viewBox="0 0 300 190"></svg></div>
+    <div class="icon" style="width:40px;height:40px;border-radius:9px"><svg class="v-b" width="27" height="27" viewBox="0 0 300 190"></svg></div>
+  </div>
+</section>
+
+<section class="row">
+  <p class="eyebrow">Lockup</p>
+  <div class="lock">
+    <svg class="v-b" width="62" height="62" viewBox="0 0 300 190"></svg>
+    <div class="divider"></div>
+    <div>
+      <div class="wordmark"><span class="m">Micro</span>G</div>
+      <div class="slogan">100M parameters. 100% Gzowo.</div>
+    </div>
+  </div>
+</section>
+</div>
+
+<script>
+// Shared construction grid. Every variant uses these numbers so the strokes
+// match optically instead of by eye.
+const SW = 15;              // stroke weight, identical for µ and G
+const BASE = 140;           // baseline
+const XTOP = 74;            // x-height top (µ)
+const DESC = 172;           // descender depth (µ)
+const R = 50;               // G radius
+// G sits close enough that the pair reads as one mark. At GCX=214 the counter
+// of the G and the bowl of the µ drifted apart and the monogram fell into two
+// separate symbols; 200 closes it without the strokes colliding.
+const GCX = 200, GCY = 90;  // G centre
+
+// µ built as two paths: a full-length left stem (which carries the descender
+// straight through) and the bowl that arcs up into the right stem.
+function mu(x1, x2){
+  const r = (x2 - x1) / 2;
+  return `
+    <path d="M${x1} ${XTOP} L${x1} ${DESC}"/>
+    <path d="M${x1} ${BASE-r} Q${x1} ${BASE} ${x1+r} ${BASE} Q${x2} ${BASE} ${x2} ${BASE-r} L${x2} ${XTOP}"/>`;
+}
+// G: a circle opened on the right with a crossbar running back to centre.
+function gee(cx, cy, r){
+  const y1 = cy - 28, y2 = cy + 28;
+  return `<path d="M${cx+r*0.86} ${y1} a${r} ${r} 0 1 0 0 ${y2-y1} V${cy} H${cx}"/>`;
+}
+function frame(inner, stroke){
+  return `<g fill="none" stroke="${stroke||'#fff'}" stroke-width="${SW}"
+            stroke-linecap="butt" stroke-linejoin="round">${inner}</g>`;
+}
+
+const B = frame(mu(60, 132) + gee(GCX, GCY, R));
+document.querySelectorAll(".v-b").forEach(s => s.innerHTML = B);
+document.querySelectorAll(".v-b-dark").forEach(s => s.innerHTML = frame(mu(60,132)+gee(GCX,GCY,R), "#000"));
+
+// C: the µ's right stem sits exactly on the G's left extreme, sharing a line.
+const cShared = GCX - R;
+document.querySelectorAll(".v-c").forEach(s =>
+  s.innerHTML = frame(mu(cShared - 72, cShared) + gee(GCX, GCY, R)));
+
+// D: B plus axis ticks — the instrument reading.
+const ticks = `
+  <g stroke-width="4" opacity=".5">
+    <path d="M${GCX} ${GCY-R-22}v11M${GCX} ${GCY+R+11}v11M${GCX+R+11} ${GCY}h11"/>
+  </g>`;
+document.querySelectorAll(".v-d").forEach(s =>
+  s.innerHTML = frame(mu(60,132) + gee(GCX,GCY,R)) + `<g fill="none" stroke="#fff">${ticks}</g>`);
+</script>
