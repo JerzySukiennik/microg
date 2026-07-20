@@ -18,7 +18,13 @@ REPO = "https://github.com/JerzySukiennik/microg.git"
 WORK = "/kaggle/working"
 
 # --- code -------------------------------------------------------------------
-if not os.path.exists(f"{WORK}/microg"):
+if os.path.exists(f"{WORK}/microg"):
+    # A stale checkout from an earlier attempt in this same session would
+    # silently run old code even after this script itself was re-fetched —
+    # that is exactly what ran a T4 session at half speed on the bf16 fix.
+    # Pulling forces the checkout to match what curl just downloaded.
+    subprocess.run(["git", "-C", f"{WORK}/microg", "pull", "--ff-only"], check=True)
+else:
     subprocess.run(["git", "clone", "--depth", "1", REPO, f"{WORK}/microg"], check=True)
 os.chdir(f"{WORK}/microg")
 subprocess.run([sys.executable, "-m", "pip", "install", "-q", "datasets", "tokenizers"], check=True)
