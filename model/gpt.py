@@ -350,7 +350,8 @@ class GPT(nn.Module):
         cos, sin = self._rope_cache
         return cos[start:need], sin[start:need]
 
-    def forward(self, idx, targets=None, capture: Capture | None = None, kv=None):
+    def forward(self, idx, targets=None, capture: Capture | None = None, kv=None,
+                return_logits: bool = True):
         """idx: (B, T) token ids. Returns (logits, loss).
 
         With `kv`, idx holds only the tokens not yet seen and the rest of the
@@ -379,7 +380,11 @@ class GPT(nn.Module):
             loss = F.cross_entropy(
                 logits.view(-1, logits.size(-1)), targets.reshape(-1), ignore_index=-1
             )
-            return logits, loss
+            # Training discards the logits, and under DataParallel every return
+            # value is shipped back to GPU 0 and concatenated. At batch 16 the
+            # logits are 16x1024x32000 — over 1 GB per step, moved for nothing
+            # and a plausible way to run a 16 GB card out of memory.
+            return (logits if return_logits else None), loss
 
         # Inference: only the last position matters, so only project that one.
         logits = self.lm_head(x[:, [-1], :])

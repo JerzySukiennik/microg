@@ -127,7 +127,7 @@ def evaluate(model, data, batch_size, iters, ctx):
     for _ in range(iters):
         x, y = data.batch(batch_size)
         with ctx:
-            _, loss = model(x, targets=y)
+            _, loss = model(x, targets=y, return_logits=False)
         losses.append(loss.mean().item())   # .mean() for the DataParallel case
     model.train()
     return sum(losses) / len(losses)
@@ -228,7 +228,9 @@ def main():
         for micro in range(args.grad_accum):
             x, y = train_data.batch(args.batch_size)
             with ctx:
-                _, loss = model(x, targets=y)
+                # return_logits=False: the logits are unused here and gathering
+                # them across GPUs costs a gigabyte a step.
+                _, loss = model(x, targets=y, return_logits=False)
                 # DataParallel returns one loss per GPU; mean() collapses it
                 # back to a scalar. On a single device this is a no-op.
                 loss = loss.mean() / args.grad_accum
