@@ -1,6 +1,6 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="Design/assets/mark-1024.png">
-  <img src="Design/assets/mark-inverse-1024.png" alt="MicroG" width="150">
+  <img src="Design/microg-icon.svg" alt="MicroG" width="150">
 </picture>
 
 # MicroG
