@@ -44,7 +44,7 @@ Po każdej sesji nadpisuj `microg-ckpt` nowym outputem (**Output → Update Data
 | | |
 |---|---|
 | Tokenów na krok | 491 520 (16 × 30 × 1024) |
-| Kroków | 3900 → ~1,9 mld tokenów |
+| Kroków | 4060 → 2,0 mld tokenów |
 | Czas | ~10 h na T4 ×2, ~17 h na jednym |
 | Checkpoint co | 100 kroków (~13 min pracy w ryzyku) |
 | Loss na starcie | **10,4** — jeśli widzisz mniej, coś jest zepsute |

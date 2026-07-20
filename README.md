@@ -18,7 +18,7 @@ The point is not to compete with large models. It is to own every layer, and to 
 | Parameters | 109,529,856 |
 | Architecture | 12 layers × 12 heads × 768 dim, 1024 context |
 | Tokenizer | byte-level BPE, 32k vocab, trained on Polish |
-| Corpus | Wikipedia PL + FineWeb-2 `pol_Latn`, ~1.9B tokens |
+| Corpus | Wikipedia PL + FineWeb-2 `pol_Latn`, 2.0B tokens |
 | Runs on | CPU, offline — an Intel MacBook Pro is the target |
 
 The architecture is GPT-2 sized but modernised: RoPE instead of learned positional embeddings, RMSNorm instead of LayerNorm, SwiGLU instead of a GELU MLP, no biases, tied embeddings. Essentially Llama in miniature.

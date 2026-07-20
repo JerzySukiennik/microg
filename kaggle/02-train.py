@@ -22,9 +22,9 @@ WORK = "/kaggle/working"
 OUT = f"{WORK}/run"
 
 # ---------------------------------------------------------------- schedule --
-# 16 x 30 x 1024 = 491,520 tokens per step. 3900 steps ~= 1.9B tokens, which is
-# roughly Chinchilla-optimal for 110M parameters (~20 tokens per parameter).
-BATCH, ACCUM, STEPS, WARMUP = 16, 30, 3900, 200
+# 16 x 30 x 1024 = 491,520 tokens per step. 4060 steps = 2.0B tokens, matching
+# the packed corpus exactly — one epoch, no repeats.
+BATCH, ACCUM, STEPS, WARMUP = 16, 30, 4060, 200
 
 if not os.path.exists(f"{WORK}/microg"):
     subprocess.run(["git", "clone", "--depth", "1", REPO, f"{WORK}/microg"], check=True)
