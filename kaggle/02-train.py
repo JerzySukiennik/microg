@@ -32,9 +32,26 @@ os.chdir(f"{WORK}/microg")
 subprocess.run([sys.executable, "-m", "pip", "install", "-q", "tokenizers"], check=True)
 
 # ------------------------------------------------------------------- data --
-data_dir = next((d for d in glob.glob("/kaggle/input/*")
-                 if os.path.exists(f"{d}/pl_train.bin")), None)
-assert data_dir, "no input dataset containing pl_train.bin — run 01-prep.py first"
+# Kaggle mounts a dataset at /kaggle/input/<slug>/, but when the dataset was
+# built from notebook output the files can sit one level deeper. Search both,
+# and if nothing turns up, print the tree rather than just asserting — "not
+# found" is useless when you cannot see what *is* there.
+hits = (glob.glob("/kaggle/input/*/pl_train.bin")
+        + glob.glob("/kaggle/input/*/*/pl_train.bin")
+        + glob.glob("/kaggle/input/*/*/*/pl_train.bin"))
+if not hits:
+    print("pl_train.bin not found. /kaggle/input contains:")
+    for root, dirs, files in os.walk("/kaggle/input"):
+        depth = root.count("/") - 2
+        if depth > 3:
+            continue
+        print("  " * depth + os.path.basename(root) + "/")
+        for f in sorted(files)[:12]:
+            size = os.path.getsize(os.path.join(root, f)) / 1e9
+            print("  " * (depth + 1) + f"{f}  {size:.2f} GB")
+    raise SystemExit("attach the microg-data dataset, or wait for it to finish building")
+
+data_dir = os.path.dirname(hits[0])
 print(f"data: {data_dir}")
 
 # ------------------------------------------------------- resume if possible --
