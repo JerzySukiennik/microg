@@ -33,6 +33,16 @@ try:
 except Exception as e:
     print(f"no HF token ({type(e).__name__}) — downloading anonymously, slower")
 
+# Already packed? Then there is nothing to do, and re-running costs seconds
+# instead of an hour. Matters because a Kaggle batch run is all-or-nothing:
+# any later cell that raises discards the whole output, and the natural
+# response is to run the notebook again.
+if os.path.exists(f"{WORK}/pl_train.bin") and os.path.getsize(f"{WORK}/pl_train.bin") > 1e9:
+    print(f"pl_train.bin already built "
+          f"({os.path.getsize(f'{WORK}/pl_train.bin')/1e9:.2f} GB) — nothing to do")
+    sys.exit(0)
+
+
 def complete(path):
     """A corpus file is finished iff its last line is the document separator.
 

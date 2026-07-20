@@ -1,0 +1,251 @@
+9.6s 1 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+9.6s 2 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+9.6s 3 0.00s - to python to disable frozen modules.
+9.6s 4 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+10.4s 5 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+10.4s 6 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+10.4s 7 0.00s - to python to disable frozen modules.
+10.4s 8 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+12.4s 9 Cloning into '/kaggle/working/microg'...
+13.0s 10 remote: Enumerating objects: 44, done.[K
+13.0s 11 remote: Counting objects:   2% (1/44)[Kremote: Counting objects:   4% (2/44)[Kremote: Counting objects:   6% (3/44)[Kremote: Counting objects:   9% (4/44)[Kremote: Counting objects:  11% (5/44)[Kremote: Counting objects:  13% (6/44)[Kremote: Counting objects:  15% (7/44)[Kremote: Counting objects:  18% (8/44)[Kremote: Counting objects:  20% (9/44)[Kremote: Counting objects:  22% (10/44)[Kremote: Counting objects:  25% (11/44)[Kremote: Counting objects:  27% (12/44)[Kremote: Counting objects:  29% (13/44)[Kremote: Counting objects:  31% (14/44)[Kremote: Counting objects:  34% (15/44)[Kremote: Counting objects:  36% (16/44)[Kremote: Counting objects:  38% (17/44)[Kremote: Counting objects:  40% (18/44)[Kremote: Counting objects:  43% (19/44)[Kremote: Counting objects:  45% (20/44)[Kremote: Counting objects:  47% (21/44)[Kremote: Counting objects:  50% (22/44)[Kremote: Counting objects:  52% (23/44)[Kremote: Counting objects:  54% (24/44)[Kremote: Counting objects:  56% (25/44)[Kremote: Counting objects:  59% (26/44)[Kremote: Counting objects:  61% (27/44)[Kremote: Counting objects:  63% (28/44)[Kremote: Counting objects:  65% (29/44)[Kremote: Counting objects:  68% (30/44)[Kremote: Counting objects:  70% (31/44)[Kremote: Counting objects:  72% (32/44)[Kremote: Counting objects:  75% (33/44)[Kremote: Counting objects:  77% (34/44)[Kremote: Counting objects:  79% (35/44)[Kremote: Counting objects:  81% (36/44)[Kremote: Counting objects:  84% (37/44)[Kremote: Counting objects:  86% (38/44)[Kremote: Counting objects:  88% (39/44)[Kremote: Counting objects:  90% (40/44)[Kremote: Counting objects:  93% (41/44)[Kremote: Counting objects:  95% (42/44)[Kremote: Counting objects:  97% (43/44)[Kremote: Counting objects: 100% (44/44)[Kremote: Counting objects: 100% (44/44), done.[K
+13.1s 12 remote: Compressing objects:   2% (1/37)[Kremote: Compressing objects:   5% (2/37)[Kremote: Compressing objects:   8% (3/37)[Kremote: Compressing objects:  10% (4/37)[Kremote: Compressing objects:  13% (5/37)[Kremote: Compressing objects:  16% (6/37)[Kremote: Compressing objects:  18% (7/37)[Kremote: Compressing objects:  21% (8/37)[Kremote: Compressing objects:  24% (9/37)[Kremote: Compressing objects:  27% (10/37)[Kremote: Compressing objects:  29% (11/37)[Kremote: Compressing objects:  32% (12/37)[Kremote: Compressing objects:  35% (13/37)[Kremote: Compressing objects:  37% (14/37)[Kremote: Compressing objects:  40% (15/37)[Kremote: Compressing objects:  43% (16/37)[Kremote: Compressing objects:  45% (17/37)[Kremote: Compressing objects:  48% (18/37)[Kremote: Compressing objects:  51% (19/37)[Kremote: Compressing objects:  54% (20/37)[Kremote: Compressing objects:  56% (21/37)[Kremote: Compressing objects:  59% (22/37)[Kremote: Compressing objects:  62% (23/37)[Kremote: Compressing objects:  64% (24/37)[Kremote: Compressing objects:  67% (25/37)[Kremote: Compressing objects:  70% (26/37)[Kremote: Compressing objects:  72% (27/37)[Kremote: Compressing objects:  75% (28/37)[Kremote: Compressing objects:  78% (29/37)[Kremote: Compressing objects:  81% (30/37)[Kremote: Compressing objects:  83% (31/37)[Kremote: Compressing objects:  86% (32/37)[Kremote: Compressing objects:  89% (33/37)[Kremote: Compressing objects:  91% (34/37)[Kremote: Compressing objects:  94% (35/37)[Kremote: Compressing objects:  97% (36/37)[Kremote: Compressing objects: 100% (37/37)[Kremote: Compressing objects: 100% (37/37), done.[K
+13.3s 13 Receiving objects:   2% (1/44)Receiving objects:   4% (2/44)Receiving objects:   6% (3/44)Receiving objects:   9% (4/44)Receiving objects:  11% (5/44)Receiving objects:  13% (6/44)Receiving objects:  15% (7/44)Receiving objects:  18% (8/44)Receiving objects:  20% (9/44)Receiving objects:  22% (10/44)Receiving objects:  25% (11/44)Receiving objects:  27% (12/44)Receiving objects:  29% (13/44)Receiving objects:  31% (14/44)Receiving objects:  34% (15/44)Receiving objects:  36% (16/44)Receiving objects:  38% (17/44)Receiving objects:  40% (18/44)Receiving objects:  43% (19/44)Receiving objects:  45% (20/44)Receiving objects:  47% (21/44)Receiving objects:  50% (22/44)Receiving objects:  52% (23/44)Receiving objects:  54% (24/44)Receiving objects:  56% (25/44)Receiving objects:  59% (26/44)Receiving objects:  61% (27/44)Receiving objects:  63% (28/44)Receiving objects:  65% (29/44)Receiving objects:  68% (30/44)Receiving objects:  70% (31/44)remote: Total 44 (delta 8), reused 31 (delta 6), pack-reused 0 (from 0)[K
+13.3s 14 Receiving objects:  72% (32/44)Receiving objects:  75% (33/44)Receiving objects:  77% (34/44)Receiving objects:  79% (35/44)Receiving objects:  81% (36/44)Receiving objects:  84% (37/44)Receiving objects:  86% (38/44)Receiving objects:  88% (39/44)Receiving objects:  90% (40/44)Receiving objects:  93% (41/44)Receiving objects:  95% (42/44)Receiving objects:  97% (43/44)Receiving objects: 100% (44/44)Receiving objects: 100% (44/44), 1018.61 KiB | 7.43 MiB/s, done.
+13.3s 15 Resolving deltas:   0% (0/8)Resolving deltas:  12% (1/8)Resolving deltas:  25% (2/8)Resolving deltas:  37% (3/8)Resolving deltas:  50% (4/8)Resolving deltas:  62% (5/8)Resolving deltas:  75% (6/8)Resolving deltas:  87% (7/8)Resolving deltas: 100% (8/8)Resolving deltas: 100% (8/8), done.
+18.9s 16 no HF token (BackendError) — downloading anonymously, slower
+23.9s 17 Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+24.0s 18 README.md: 0.00B [00:00, ?B/s]README.md: 131kB [00:00, 99.1MB/s]
+35.7s 19 20,000 docs      160.7M chars  (~46M tokens)
+38.1s 20 40,000 docs      260.9M chars  (~75M tokens)
+40.2s 21 60,000 docs      347.2M chars  (~99M tokens)
+44.1s 22 80,000 docs      412.8M chars  (~118M tokens)
+46.2s 23 100,000 docs      468.0M chars  (~134M tokens)
+47.9s 24 120,000 docs      511.4M chars  (~146M tokens)
+49.3s 25 140,000 docs      575.0M chars  (~164M tokens)
+57.4s 26 160,000 docs      626.9M chars  (~179M tokens)
+61.6s 27 180,000 docs      680.7M chars  (~194M tokens)
+65.1s 28 200,000 docs      736.8M chars  (~211M tokens)
+68.8s 29 220,000 docs      789.4M chars  (~226M tokens)
+72.8s 30 240,000 docs      839.5M chars  (~240M tokens)
+76.7s 31 260,000 docs      888.1M chars  (~254M tokens)
+80.7s 32 280,000 docs      937.1M chars  (~268M tokens)
+85.3s 33 300,000 docs      985.6M chars  (~282M tokens)
+89.9s 34 320,000 docs     1031.8M chars  (~295M tokens)
+95.1s 35 340,000 docs     1078.8M chars  (~308M tokens)
+98.3s 36 360,000 docs     1123.1M chars  (~321M tokens)
+102.6s 37 380,000 docs     1166.9M chars  (~333M tokens)
+107.0s 38 400,000 docs     1209.3M chars  (~346M tokens)
+111.3s 39 420,000 docs     1252.6M chars  (~358M tokens)
+115.6s 40 440,000 docs     1294.2M chars  (~370M tokens)
+120.8s 41 460,000 docs     1336.9M chars  (~382M tokens)
+126.6s 42 480,000 docs     1378.5M chars  (~394M tokens)
+128.5s 43 500,000 docs     1419.1M chars  (~405M tokens)
+133.8s 44 520,000 docs     1463.5M chars  (~418M tokens)
+137.6s 45 540,000 docs     1505.8M chars  (~430M tokens)
+140.2s 46 560,000 docs     1546.2M chars  (~442M tokens)
+141.7s 47 580,000 docs     1588.7M chars  (~454M tokens)
+143.5s 48 600,000 docs     1629.2M chars  (~465M tokens)
+144.9s 49 620,000 docs     1670.5M chars  (~477M tokens)
+146.4s 50 640,000 docs     1709.6M chars  (~488M tokens)
+147.8s 51 660,000 docs     1748.8M chars  (~500M tokens)
+149.2s 52 680,000 docs     1790.7M chars  (~512M tokens)
+152.9s 53 700,000 docs     1832.4M chars  (~524M tokens)
+155.5s 54 720,000 docs     1874.1M chars  (~535M tokens)
+157.5s 55 740,000 docs     1914.9M chars  (~547M tokens)
+159.5s 56 760,000 docs     1956.7M chars  (~559M tokens)
+161.2s 57 780,000 docs     1999.3M chars  (~571M tokens)
+162.5s 58 800,000 docs     2040.9M chars  (~583M tokens)
+164.1s 59 820,000 docs     2083.9M chars  (~595M tokens)
+165.6s 60 840,000 docs     2124.9M chars  (~607M tokens)
+167.1s 61 860,000 docs     2166.0M chars  (~619M tokens)
+171.5s 62 880,000 docs     2207.6M chars  (~631M tokens)
+174.3s 63 900,000 docs     2252.3M chars  (~644M tokens)
+176.4s 64 920,000 docs     2293.2M chars  (~655M tokens)
+178.1s 65 940,000 docs     2334.4M chars  (~667M tokens)
+179.5s 66 960,000 docs     2375.4M chars  (~679M tokens)
+181.0s 67 980,000 docs     2416.9M chars  (~691M tokens)
+182.5s 68 1,000,000 docs     2460.1M chars  (~703M tokens)
+183.9s 69 
+183.9s 70 done -> /kaggle/working/corpus_wiki.txt
+183.9s 71 kept 1,019,160 docs, skipped 568,561 short ones
+183.9s 72 2499.7M chars  ~714M tokens (rough)
+185.8s 73 Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+186.0s 74 README.md: 0.00B [00:00, ?B/s]README.md: 329kB [00:00, 108MB/s]
+189.0s 75 Resolving data files:   0%|                              | 0/55 [00:00<?, ?it/s]Resolving data files: 100%|██████████████████| 55/55 [00:00<00:00, 23054.84it/s]
+199.4s 76 20,000 docs      102.0M chars  (~29M tokens)
+202.8s 77 40,000 docs      173.4M chars  (~50M tokens)
+205.7s 78 60,000 docs      240.0M chars  (~69M tokens)
+208.5s 79 80,000 docs      304.9M chars  (~87M tokens)
+211.7s 80 100,000 docs      366.1M chars  (~105M tokens)
+215.0s 81 120,000 docs      427.8M chars  (~122M tokens)
+217.5s 82 140,000 docs      489.0M chars  (~140M tokens)
+220.2s 83 160,000 docs      551.2M chars  (~157M tokens)
+223.0s 84 180,000 docs      611.8M chars  (~175M tokens)
+225.7s 85 200,000 docs      673.4M chars  (~192M tokens)
+228.8s 86 220,000 docs      735.0M chars  (~210M tokens)
+231.5s 87 240,000 docs      796.8M chars  (~228M tokens)
+234.2s 88 260,000 docs      858.2M chars  (~245M tokens)
+236.9s 89 280,000 docs      921.7M chars  (~263M tokens)
+239.5s 90 300,000 docs      986.1M chars  (~282M tokens)
+242.4s 91 320,000 docs     1050.8M chars  (~300M tokens)
+245.0s 92 340,000 docs     1115.9M chars  (~319M tokens)
+247.9s 93 360,000 docs     1180.1M chars  (~337M tokens)
+250.5s 94 380,000 docs     1241.9M chars  (~355M tokens)
+253.2s 95 400,000 docs     1302.7M chars  (~372M tokens)
+255.9s 96 420,000 docs     1366.3M chars  (~390M tokens)
+258.9s 97 440,000 docs     1431.1M chars  (~409M tokens)
+261.5s 98 460,000 docs     1493.6M chars  (~427M tokens)
+264.3s 99 480,000 docs     1556.4M chars  (~445M tokens)
+267.5s 100 500,000 docs     1620.9M chars  (~463M tokens)
+269.9s 101 520,000 docs     1683.1M chars  (~481M tokens)
+272.6s 102 540,000 docs     1745.5M chars  (~499M tokens)
+275.3s 103 560,000 docs     1808.6M chars  (~517M tokens)
+277.9s 104 580,000 docs     1874.6M chars  (~536M tokens)
+280.6s 105 600,000 docs     1941.2M chars  (~555M tokens)
+283.7s 106 620,000 docs     2005.3M chars  (~573M tokens)
+286.4s 107 640,000 docs     2067.8M chars  (~591M tokens)
+289.5s 108 660,000 docs     2152.0M chars  (~615M tokens)
+292.5s 109 680,000 docs     2227.4M chars  (~636M tokens)
+295.5s 110 700,000 docs     2293.2M chars  (~655M tokens)
+298.2s 111 720,000 docs     2355.4M chars  (~673M tokens)
+301.0s 112 740,000 docs     2413.1M chars  (~689M tokens)
+303.7s 113 760,000 docs     2475.1M chars  (~707M tokens)
+306.5s 114 780,000 docs     2536.3M chars  (~725M tokens)
+309.5s 115 800,000 docs     2596.3M chars  (~742M tokens)
+312.2s 116 820,000 docs     2656.4M chars  (~759M tokens)
+314.9s 117 840,000 docs     2717.5M chars  (~776M tokens)
+317.4s 118 860,000 docs     2778.5M chars  (~794M tokens)
+319.9s 119 880,000 docs     2838.7M chars  (~811M tokens)
+322.7s 120 900,000 docs     2901.1M chars  (~829M tokens)
+325.3s 121 920,000 docs     2964.8M chars  (~847M tokens)
+327.7s 122 940,000 docs     3028.8M chars  (~865M tokens)
+330.1s 123 960,000 docs     3088.4M chars  (~882M tokens)
+332.7s 124 980,000 docs     3148.7M chars  (~900M tokens)
+335.3s 125 1,000,000 docs     3213.6M chars  (~918M tokens)
+338.1s 126 1,020,000 docs     3277.1M chars  (~936M tokens)
+340.9s 127 1,040,000 docs     3340.0M chars  (~954M tokens)
+343.7s 128 1,060,000 docs     3404.3M chars  (~973M tokens)
+346.4s 129 1,080,000 docs     3465.2M chars  (~990M tokens)
+349.2s 130 1,100,000 docs     3527.1M chars  (~1008M tokens)
+352.3s 131 1,120,000 docs     3591.9M chars  (~1026M tokens)
+355.9s 132 1,140,000 docs     3658.8M chars  (~1045M tokens)
+358.7s 133 1,160,000 docs     3723.7M chars  (~1064M tokens)
+361.5s 134 1,180,000 docs     3787.0M chars  (~1082M tokens)
+364.5s 135 1,200,000 docs     3865.3M chars  (~1104M tokens)
+367.3s 136 1,220,000 docs     3941.7M chars  (~1126M tokens)
+369.9s 137 1,240,000 docs     4008.6M chars  (~1145M tokens)
+372.6s 138 1,260,000 docs     4070.1M chars  (~1163M tokens)
+375.5s 139 1,280,000 docs     4130.9M chars  (~1180M tokens)
+378.4s 140 1,300,000 docs     4191.1M chars  (~1197M tokens)
+380.8s 141 1,320,000 docs     4250.1M chars  (~1214M tokens)
+383.5s 142 1,340,000 docs     4311.2M chars  (~1232M tokens)
+386.2s 143 1,360,000 docs     4371.3M chars  (~1249M tokens)
+389.0s 144 1,380,000 docs     4430.4M chars  (~1266M tokens)
+391.7s 145 1,400,000 docs     4491.4M chars  (~1283M tokens)
+394.5s 146 1,420,000 docs     4552.8M chars  (~1301M tokens)
+397.5s 147 1,440,000 docs     4614.9M chars  (~1319M tokens)
+400.1s 148 1,460,000 docs     4674.7M chars  (~1336M tokens)
+403.0s 149 1,480,000 docs     4733.8M chars  (~1353M tokens)
+405.8s 150 1,500,000 docs     4797.8M chars  (~1371M tokens)
+408.4s 151 1,520,000 docs     4861.9M chars  (~1389M tokens)
+411.1s 152 1,540,000 docs     4925.4M chars  (~1407M tokens)
+414.0s 153 1,560,000 docs     4988.4M chars  (~1425M tokens)
+416.7s 154 1,580,000 docs     5049.6M chars  (~1443M tokens)
+419.4s 155 1,600,000 docs     5112.8M chars  (~1461M tokens)
+422.5s 156 1,620,000 docs     5178.3M chars  (~1480M tokens)
+425.6s 157 1,640,000 docs     5243.4M chars  (~1498M tokens)
+428.5s 158 1,660,000 docs     5307.9M chars  (~1517M tokens)
+431.1s 159 1,680,000 docs     5378.8M chars  (~1537M tokens)
+434.3s 160 1,700,000 docs     5454.6M chars  (~1558M tokens)
+437.1s 161 1,720,000 docs     5519.6M chars  (~1577M tokens)
+439.8s 162 1,740,000 docs     5580.0M chars  (~1594M tokens)
+442.8s 163 1,760,000 docs     5639.2M chars  (~1611M tokens)
+445.6s 164 1,780,000 docs     5698.4M chars  (~1628M tokens)
+448.3s 165 1,800,000 docs     5758.0M chars  (~1645M tokens)
+451.0s 166 1,820,000 docs     5819.3M chars  (~1663M tokens)
+454.0s 167 1,840,000 docs     5880.2M chars  (~1680M tokens)
+456.9s 168 1,860,000 docs     5939.4M chars  (~1697M tokens)
+459.4s 169 reached --max-chars, stopping
+459.7s 170 
+459.7s 171 done -> /kaggle/working/corpus_web.txt
+459.7s 172 kept 1,879,858 docs, skipped 153,096 short ones
+459.7s 173 6000.0M chars  ~1714M tokens (rough)
+460.0s 174 tokenizer: data/tokenizer-v2.json
+460.5s 175 packing /kaggle/working/corpus_wiki.txt ...
+637.8s 176 100,000 docs     113.0M tokens
+735.0s 177 200,000 docs     179.1M tokens
+823.9s 178 300,000 docs     241.5M tokens
+903.2s 179 400,000 docs     297.6M tokens
+981.2s 180 500,000 docs     350.5M tokens
+1057.3s 181 600,000 docs     402.7M tokens
+1130.0s 182 700,000 docs     453.4M tokens
+1204.0s 183 800,000 docs     505.1M tokens
+1278.9s 184 900,000 docs     556.8M tokens
+1352.5s 185 1,000,000 docs     607.7M tokens
+1366.4s 186 packing /kaggle/working/corpus_web.txt ...
+1482.5s 187 1,100,000 docs     691.5M tokens
+1595.8s 188 1,200,000 docs     762.9M tokens
+1707.9s 189 1,300,000 docs     834.3M tokens
+1826.0s 190 1,400,000 docs     907.9M tokens
+1941.1s 191 1,500,000 docs     979.9M tokens
+2056.9s 192 1,600,000 docs    1052.7M tokens
+2192.4s 193 1,700,000 docs    1134.9M tokens
+2306.6s 194 1,800,000 docs    1207.5M tokens
+2415.8s 195 1,900,000 docs    1277.3M tokens
+2527.3s 196 2,000,000 docs    1348.5M tokens
+2642.8s 197 2,100,000 docs    1421.1M tokens
+2756.7s 198 2,200,000 docs    1494.2M tokens
+2888.4s 199 2,300,000 docs    1575.6M tokens
+2994.0s 200 2,400,000 docs    1645.0M tokens
+3102.0s 201 2,500,000 docs    1714.7M tokens
+3213.3s 202 2,600,000 docs    1787.1M tokens
+3327.3s 203 2,700,000 docs    1863.0M tokens
+3446.3s 204 2,800,000 docs    1938.1M tokens
+3554.8s 205 
+3554.8s 206 done — 2,899,018 docs, 2007.2M tokens
+3554.8s 207 train:   1997.3M -> /kaggle/working/pl_train.bin
+3554.8s 208 val:        9.8M -> /kaggle/working/pl_val.bin
+3554.9s 209 
+3554.9s 210 --- verification ---
+3554.9s 211 tokens on disk:  1,997,318,958
+3564.3s 212 max token id:    31999 (vocab 32000)
+3564.7s 213 <|endoftext|> in first 2M tokens: 1,065 (~1 per 1,877 tokens)
+3564.7s 214 
+3564.7s 215 sample decode from the middle of the file:
+3564.7s 216 wnętrz. Obrazy do nowoczesnej kuchni to np. abstrakcje w kontrastujących barwach ale także obrazy z popularnymi hasłami i humorystycznymi sloganami. W klasycznym wnętrzu doskonale prezentowały się będą bardziej tradycyjne kompozycje takie jak obrazy z owocami, warzywami, potrawami i napojami
+3565.5s 217 
+3565.5s 218 done — save this notebook's output as a Dataset named 'microg-data'
+3565.5s 219 __notebook__.ipynb  0.00 GB
+3565.5s 220 pl_train.bin  3.99 GB
+3565.5s 221 pl_val.bin  0.02 GB
+3565.5s 222 prep.py  0.00 GB
+3565.5s 223 tokenizer.json  0.00 GB
+3566.5s 224 Traceback (most recent call last):
+3566.5s 225 File "<string>", line 1, in <module>
+3566.5s 226 File "/usr/local/lib/python3.12/dist-packages/papermill/execute.py", line 131, in execute_notebook
+3566.6s 227 raise_for_execution_errors(nb, output_path)
+3566.6s 228 File "/usr/local/lib/python3.12/dist-packages/papermill/execute.py", line 251, in raise_for_execution_errors
+3566.6s 229 raise error
+3566.6s 230 papermill.exceptions.PapermillExecutionError:
+3566.6s 231 ---------------------------------------------------------------------------
+3566.6s 232 Exception encountered at "In [2]":
+3566.6s 233 ---------------------------------------------------------------------------
+3566.6s 234 FileNotFoundError                         Traceback (most recent call last)
+3566.6s 235 /tmp/ipykernel_16/2807030862.py in <cell line: 0>()
+3566.6s 236 6 for f in ('corpus_wiki.txt', 'corpus_web.txt'):
+3566.6s 237 7     p = f'{W}/{f}'
+3566.6s 238 ----> 8     with open(p, 'rb') as fh:
+3566.6s 239 9         fh.seek(-32, 2)
+3566.6s 240 10         tail = fh.read().decode('utf-8', 'ignore').strip()
+3566.6s 241 
+3566.6s 242 FileNotFoundError: [Errno 2] No such file or directory: '/kaggle/working/corpus_wiki.txt'
+3566.6s 243 
+3570.5s 244 /usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+3570.5s 245 cells[i][c] = re.sub('\\\\\|', '|', cell)
+3570.8s 246 /usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+3570.8s 247 text = re.sub(r'_', '\_', text) # Escape underscores in display text
+3571.8s 248 [NbConvertApp] Converting notebook __notebook__.ipynb to notebook
+3572.2s 249 [NbConvertApp] Writing 19457 bytes to __notebook__.ipynb
+3575.3s 250 [NbConvertApp] Converting notebook __notebook__.ipynb to html
+3576.5s 251 [NbConvertApp] Writing 294954 bytes to __results__.html
