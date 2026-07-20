@@ -160,10 +160,15 @@ def main():
     args = ap.parse_args()
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    # bf16 has fp32's exponent range, so it needs no loss scaling. Older GPUs
-    # (Kaggle P100/T4) lack it and fall back to fp16 with a GradScaler.
+    # bf16 has fp32's exponent range, so it needs no loss scaling. But
+    # torch.cuda.is_bf16_supported() answers "can this run at all", not "does
+    # this have tensor cores for it" — it reports True on Turing (T4, compute
+    # capability 7.5) even though bf16 there has no hardware acceleration and
+    # runs on the slow path. Measured on a Kaggle T4x2: bf16 gave 28k tok/s,
+    # roughly half of what fp16 tensor cores should deliver. Bf16 tensor cores
+    # only exist from Ampere (capability 8.0) onward, so gate on that directly.
     use_amp = device == "cuda"
-    bf16 = use_amp and torch.cuda.is_bf16_supported()
+    bf16 = use_amp and torch.cuda.get_device_capability()[0] >= 8
     amp_dtype = torch.bfloat16 if bf16 else torch.float16
     ctx = (torch.autocast(device_type="cuda", dtype=amp_dtype)
            if use_amp else torch.autocast(device_type="cpu", enabled=False))

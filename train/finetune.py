@@ -111,7 +111,9 @@ def main():
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     use_amp = device == "cuda"
-    bf16 = use_amp and torch.cuda.is_bf16_supported()
+    # See train.py: is_bf16_supported() is True on T4 without tensor cores for
+    # it, which halved throughput there. Gate on Ampere+ instead.
+    bf16 = use_amp and torch.cuda.get_device_capability()[0] >= 8
     ctx = (torch.autocast(device_type="cuda",
                           dtype=torch.bfloat16 if bf16 else torch.float16)
            if use_amp else torch.autocast(device_type="cpu", enabled=False))
