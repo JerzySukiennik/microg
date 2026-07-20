@@ -1,7 +1,7 @@
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="Design/assets/mark-1024.png">
-  <img src="Design/microg-icon.svg" alt="MicroG" width="150">
-</picture>
+<!-- One image, no <picture>: the icon carries its own dark plate, so it reads
+     correctly in both GitHub themes. A bare transparent mark does not — white
+     on white is how this ended up as a blank square the first time. -->
+<img src="Design/microg-icon.svg" alt="MicroG" width="150">
 
 # MicroG
 

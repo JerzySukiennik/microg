@@ -1,0 +1,104 @@
+<meta charset="utf-8">
+<title>MicroG rasteriser</title>
+<style>
+  body{margin:0;background:#141416;color:#eee;font:13px/1.6 ui-monospace,Menlo,monospace;padding:26px}
+  #log div{padding:1px 0}
+  .ok{color:#7ddf87} .err{color:#ff7a7a}
+  /* checkerboard proves transparency rather than asserting it */
+  #preview{margin-top:22px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+  #preview img{background:
+    conic-gradient(#bbb 0 25%,#fff 0 50%,#bbb 0 75%,#fff 0) 0 0/14px 14px;
+    border:1px solid #333}
+</style>
+<h1 style="font-size:14px;margin:0 0 14px">MicroG → transparent PNG</h1>
+<div id="log"></div>
+<div id="preview"></div>
+
+<script>
+const PORT = 8765;
+const log = (msg, cls="") => {
+  const d = document.createElement("div");
+  d.className = cls; d.textContent = msg;
+  document.getElementById("log").appendChild(d);
+};
+
+const MARK = `
+  <g fill="none" stroke="COLOUR" stroke-width="15" stroke-linecap="butt" stroke-linejoin="round" transform="translate(0,11)">
+    <path d="M60 74 L60 172"/>
+    <path d="M60 104 Q60 140 96 140 Q132 140 132 104 L132 74"/>
+    <path d="M243 62 a50 50 0 1 0 0 56 V90 H200"/>
+  </g>`;
+
+const markSVG = c => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 310 212" width="310" height="212">${MARK.replace("COLOUR", c)}</svg>`;
+
+const iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="#0d0d0f"/>
+  <rect x="100.5" y="100.5" width="823" height="823" rx="184.5" fill="none" stroke="#ffffff" stroke-opacity=".10" stroke-width="1"/>
+  <g transform="translate(179.4,260.9) scale(2.146)">${MARK.replace("COLOUR", "#fff")}</g>
+</svg>`;
+
+function load(svg){
+  return new Promise((res, rej) => {
+    const img = new Image();
+    img.onload = () => res(img);
+    img.onerror = () => rej(new Error("svg failed to load"));
+    img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+  });
+}
+
+async function send(name, canvas){
+  const blob = await new Promise(r => canvas.toBlob(r, "image/png"));
+  const res = await fetch(`http://127.0.0.1:${PORT}/${name}`, {method:"POST", body: blob});
+  if(!res.ok) throw new Error(`server said ${res.status}`);
+  log(`  ${name}  ${(blob.size/1024).toFixed(1)} KB`, "ok");
+  return blob;
+}
+
+function draw(img, w, h){
+  const c = document.createElement("canvas");
+  c.width = w; c.height = h;
+  // No fillRect: the canvas is already fully transparent, and that is the
+  // whole point — qlmanage painted white here and produced a white box.
+  const ctx = c.getContext("2d");
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = "high";
+  ctx.drawImage(img, 0, 0, w, h);
+  return c;
+}
+
+(async () => {
+  try {
+    log("rendering icon...");
+    const icon = await load(iconSVG);
+    for(const s of [1024, 512, 256, 128, 64, 32, 16]){
+      await send(`icon-${s}.png`, draw(icon, s, s));
+    }
+    await send("favicon-32.png", draw(icon, 32, 32));
+
+    log("rendering mark (white)...");
+    const white = await load(markSVG("#ffffff"));
+    for(const w of [1240, 620, 310]){
+      await send(`mark-${w}.png`, draw(white, w, Math.round(w*212/310)));
+    }
+
+    log("rendering mark (black)...");
+    const black = await load(markSVG("#000000"));
+    for(const w of [1240, 620, 310]){
+      await send(`mark-inverse-${w}.png`, draw(black, w, Math.round(w*212/310)));
+    }
+
+    // Show the results on a checkerboard: if any of them is secretly opaque,
+    // it will read as a solid rectangle here instead of a floating glyph.
+    const pv = document.getElementById("preview");
+    for(const [svg, w, h] of [[iconSVG,120,120],[markSVG("#ffffff"),180,123],[markSVG("#000000"),180,123]]){
+      const im = await load(svg);
+      const c = draw(im, w*2, h*2);
+      const el = new Image(); el.src = c.toDataURL(); el.width = w;
+      pv.appendChild(el);
+    }
+    log("ALL DONE", "ok");
+  } catch(e) {
+    log("FAILED: " + e.message, "err");
+  }
+})();
+</script>
