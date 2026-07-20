@@ -16,6 +16,8 @@ import argparse
 import json
 import math
 import os
+import queue
+import threading
 import time
 from pathlib import Path
 
@@ -32,29 +34,67 @@ from model.gpt import GPT, GPTConfig  # noqa: E402
 # ---------------------------------------------------------------------------
 
 class TokenData:
-    """Random windows over a memory-mapped token array.
+    """Random windows over a memory-mapped token array, prefetched on a
+    background thread.
 
     np.memmap means we never load the whole corpus into RAM — the OS pages in
     only the slices we touch. A 2B-token corpus is 4 GB on disk and costs us
     almost nothing resident.
+
+    Two things matter for throughput here, and the original version had
+    neither: on a live Kaggle T4x2 run this class alone held the GPUs at
+    ~24k tok/s (~0.68s per micro-batch) — implausibly slow for a 110M model
+    with tensor cores, meaning the GPUs were idle waiting on Python.
+
+      Vectorised gather. Building each of the 16 rows with its own Python-level
+      slice + astype + torch.stack call pays interpreter overhead 16 times
+      over. A single fancy-index gather does the same read in one call.
+
+      Prefetching. Without it, CPU batch prep and GPU compute strictly
+      alternate — the GPU sits idle for every millisecond Python spends
+      building the next batch. A background thread prepares batch N+1 while
+      the GPU is still busy with batch N, so the two overlap instead of
+      serialising.
     """
 
-    def __init__(self, path: str, block_size: int, device: str):
+    def __init__(self, path: str, block_size: int, device: str, prefetch: int = 3):
         self.data = np.memmap(path, dtype=np.uint16, mode="r")
         self.block_size = block_size
         self.device = device
         if len(self.data) <= block_size + 1:
             raise ValueError(f"{path} holds only {len(self.data)} tokens")
+        self._queue = queue.Queue(maxsize=prefetch)
+        self._batch_size = None
+        self._thread = None
 
-    def batch(self, batch_size: int):
-        # Sample independent random offsets. For a corpus this size, random
-        # windows approximate a shuffled epoch closely enough and avoid having
-        # to materialise an index.
-        ix = torch.randint(len(self.data) - self.block_size - 1, (batch_size,))
-        x = torch.stack([torch.from_numpy(self.data[i:i + self.block_size].astype(np.int64)) for i in ix])
+    def _make_cpu_batch(self, batch_size: int):
+        T = self.block_size
+        starts = np.random.randint(0, len(self.data) - T - 1, size=batch_size)
+        # One gather for x and its y-shifted-by-one neighbour together, instead
+        # of batch_size separate slices — the loop moves from Python into numpy's
+        # C implementation.
+        offsets = starts[:, None] + np.arange(T + 1, dtype=np.int64)[None, :]
+        chunk = self.data[offsets].astype(np.int64)
+        x = torch.from_numpy(np.ascontiguousarray(chunk[:, :T]))
         # y is x shifted by one: position t predicts t+1. Getting this wrong is
         # the classic silent bug — the loss looks great and the model is useless.
-        y = torch.stack([torch.from_numpy(self.data[i + 1:i + 1 + self.block_size].astype(np.int64)) for i in ix])
+        y = torch.from_numpy(np.ascontiguousarray(chunk[:, 1:T + 1]))
+        return x, y
+
+    def _prefetch_loop(self, batch_size: int):
+        while True:
+            self._queue.put(self._make_cpu_batch(batch_size))
+
+    def batch(self, batch_size: int):
+        if self._thread is None:
+            self._batch_size = batch_size
+            self._thread = threading.Thread(
+                target=self._prefetch_loop, args=(batch_size,), daemon=True)
+            self._thread.start()
+        assert batch_size == self._batch_size, \
+            "batch_size changed after prefetching started"
+
+        x, y = self._queue.get()
         if self.device == "cuda":
             return x.pin_memory().to("cuda", non_blocking=True), y.pin_memory().to("cuda", non_blocking=True)
         return x.to(self.device), y.to(self.device)
