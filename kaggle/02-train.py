@@ -22,9 +22,14 @@ WORK = "/kaggle/working"
 OUT = f"{WORK}/run"
 
 # ---------------------------------------------------------------- schedule --
-# 16 x 30 x 1024 = 491,520 tokens per step. 4060 steps = 2.0B tokens, matching
-# the packed corpus exactly — one epoch, no repeats.
-BATCH, ACCUM, STEPS, WARMUP = 16, 30, 4060, 200
+# 8 x 60 x 1024 = 491,520 tokens per step — same total as 16x30, deliberately:
+# the DataParallel test scattered batch=16 as 8+8 across two GPUs, so one GPU
+# alone OOM'd trying to hold all 16 (13.58 GiB used, 1.95 GiB more requested,
+# only 1.01 GiB free). Halving batch and doubling accum keeps effective batch
+# size and tokens/step identical, so the single-GPU throughput comparison
+# stays apples-to-apples. 4060 steps = 2.0B tokens, matching the packed
+# corpus exactly — one epoch, no repeats.
+BATCH, ACCUM, STEPS, WARMUP = 8, 60, 4060, 200
 
 if os.path.exists(f"{WORK}/microg"):
     # A stale checkout from an earlier attempt in this same session would
