@@ -22,14 +22,16 @@ WORK = "/kaggle/working"
 OUT = f"{WORK}/run"
 
 # ---------------------------------------------------------------- schedule --
-# 8 x 60 x 1024 = 491,520 tokens per step — same total as 16x30, deliberately:
-# the DataParallel test scattered batch=16 as 8+8 across two GPUs, so one GPU
-# alone OOM'd trying to hold all 16 (13.58 GiB used, 1.95 GiB more requested,
-# only 1.01 GiB free). Halving batch and doubling accum keeps effective batch
-# size and tokens/step identical, so the single-GPU throughput comparison
-# stays apples-to-apples. 4060 steps = 2.0B tokens, matching the packed
-# corpus exactly — one epoch, no repeats.
-BATCH, ACCUM, STEPS, WARMUP = 8, 60, 4060, 200
+# 16 x 30 x 1024 = 491,520 tokens per step. 4060 steps = 2.0B tokens, matching
+# the packed corpus exactly — one epoch, no repeats.
+#
+# Settled by measurement, not assumption: single-GPU (batch=8, same
+# tokens/step) measured 13.2k tok/s; DataParallel across 2 GPUs measured
+# 25.2k — almost exactly 2x, textbook data-parallel scaling. DataParallel's
+# PCIe broadcast tax was the suspect; it is not the bottleneck. Per-GPU T4
+# compute throughput is, and that is a harder problem than a one-line fix —
+# accepting ~22h across 2 resumable sessions rather than chasing it further.
+BATCH, ACCUM, STEPS, WARMUP = 16, 30, 4060, 200
 
 if os.path.exists(f"{WORK}/microg"):
     # A stale checkout from an earlier attempt in this same session would
@@ -89,14 +91,7 @@ cmd = [sys.executable, "train/train.py",
        "--warmup", str(WARMUP),
        "--eval-every", "100",
        "--ckpt-every", "100",     # ~13 min of work at risk if the session dies
-       "--log-every", "10",
-       # TEMPORARY: measuring whether DataParallel's per-microstep model
-       # broadcast over PCIe (T4 has no NVLink) is costing more than the
-       # second GPU is worth. A live run held steady at ~25k tok/s with 2
-       # GPUs regardless of a vectorize+prefetch fix that ruled out data
-       # loading as the cause — DataParallel's replicate/gather tax is the
-       # next suspect. Remove this line once the comparison is done.
-       "--single-gpu"] + resume
+       "--log-every", "10"] + resume
 print(" ".join(cmd), flush=True)
 subprocess.run(cmd, check=True)
 
