@@ -84,7 +84,14 @@ cmd = [sys.executable, "train/train.py",
        "--warmup", str(WARMUP),
        "--eval-every", "100",
        "--ckpt-every", "100",     # ~13 min of work at risk if the session dies
-       "--log-every", "10"] + resume
+       "--log-every", "10",
+       # TEMPORARY: measuring whether DataParallel's per-microstep model
+       # broadcast over PCIe (T4 has no NVLink) is costing more than the
+       # second GPU is worth. A live run held steady at ~25k tok/s with 2
+       # GPUs regardless of a vectorize+prefetch fix that ruled out data
+       # loading as the cause — DataParallel's replicate/gather tax is the
+       # next suspect. Remove this line once the comparison is done.
+       "--single-gpu"] + resume
 print(" ".join(cmd), flush=True)
 subprocess.run(cmd, check=True)
 
