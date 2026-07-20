@@ -21,6 +21,7 @@ document boundaries to place <|endoftext|>.
 
 import argparse
 import os
+import sys
 from pathlib import Path
 
 from datasets import load_dataset
@@ -93,3 +94,17 @@ if __name__ == "__main__":
     main(args.source, args.out,
          int(args.max_chars) if args.max_chars else None,
          args.min_chars)
+
+    # Leave without running interpreter shutdown.
+    #
+    # `datasets` streaming keeps HTTP worker threads alive, and on some
+    # versions they are still touching the GIL when Python finalises, which
+    # aborts the process:
+    #     Fatal Python error: PyGILState_Release: thread state must be current
+    # The corpus is already written and flushed at this point, so the crash is
+    # cosmetic — except that it returns SIGABRT, and any caller checking the
+    # exit status treats a completed download as a failure. os._exit skips
+    # finalisation entirely and reports success.
+    sys.stdout.flush()
+    sys.stderr.flush()
+    os._exit(0)

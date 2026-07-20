@@ -33,10 +33,30 @@ try:
 except Exception as e:
     print(f"no HF token ({type(e).__name__}) — downloading anonymously, slower")
 
-subprocess.run([sys.executable, "data/fetch_corpus.py", "wiki",
-                "--out", f"{WORK}/corpus_wiki.txt"], check=True)
-subprocess.run([sys.executable, "data/fetch_corpus.py", "fineweb",
-                "--out", f"{WORK}/corpus_web.txt", "--max-chars", "6e9"], check=True)
+def complete(path):
+    """A corpus file is finished iff its last line is the document separator.
+
+    Worth checking rather than trusting: a download can die after writing most
+    of the file, and re-downloading 6 GB because of an unverified assumption is
+    expensive in both directions.
+    """
+    if not os.path.exists(path) or os.path.getsize(path) < 1000:
+        return False
+    with open(path, "rb") as f:
+        f.seek(-32, 2)
+        return f.read().decode("utf-8", "ignore").strip().endswith("<|doc|>")
+
+
+def fetch(source, out, extra=()):
+    if complete(out):
+        print(f"{out} already complete ({os.path.getsize(out)/1e9:.2f} GB) — skipping")
+        return
+    subprocess.run([sys.executable, "data/fetch_corpus.py", source,
+                    "--out", out, *extra], check=True)
+
+
+fetch("wiki", f"{WORK}/corpus_wiki.txt")
+fetch("fineweb", f"{WORK}/corpus_web.txt", ("--max-chars", "6e9"))
 
 # --- tokenizer --------------------------------------------------------------
 # Prefer the mixed-corpus tokenizer if the repo has it; fall back to v1.
