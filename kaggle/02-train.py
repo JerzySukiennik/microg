@@ -69,7 +69,13 @@ print(f"data: {data_dir}")
 
 # ------------------------------------------------------- resume if possible --
 os.makedirs(OUT, exist_ok=True)
-prev = next((p for p in glob.glob("/kaggle/input/*/run/ckpt.pt")), None)
+# Two possible dataset layouts: nested (dataset built from "Save Notebook
+# Output as Dataset" in the Kaggle UI, which preserves /kaggle/working/run/)
+# and flat (the orchestrate.py automation copies ckpt.pt/best.pt straight
+# into the dataset root, no run/ subfolder). Check both — a mismatch here
+# means "--resume" silently trains from scratch instead of failing loudly.
+prev = next((p for p in glob.glob("/kaggle/input/*/ckpt.pt")
+             + glob.glob("/kaggle/input/*/run/ckpt.pt")), None)
 resume = []
 if prev:
     shutil.copy(prev, f"{OUT}/ckpt.pt")
