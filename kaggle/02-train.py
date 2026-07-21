@@ -9,6 +9,14 @@ A Kaggle session is capped at 12 hours and can die sooner without warning, so
 this is built to be interrupted. Everything needed to continue lands in
 /kaggle/working/run every CKPT_EVERY steps; add that output as an input to the
 next session and it picks up mid-stride.
+
+This file is documentation of intent, not what actually runs: the automated
+orchestrator (Niepotrzebne/kaggle-orchestration/orchestrate.py) pushes
+Niepotrzebne/kaggle-orchestration/kernel/train_kernel.py as the kernel's
+code_file. The two are kept manually in sync — a real resume-breaking bug
+once lived only in the difference between them (this copy had the fix,
+train_kernel.py didn't), so treat any edit here as incomplete until mirrored
+there too.
 """
 
 import os
