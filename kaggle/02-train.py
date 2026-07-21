@@ -45,13 +45,11 @@ os.chdir(f"{WORK}/microg")
 subprocess.run([sys.executable, "-m", "pip", "install", "-q", "tokenizers"], check=True)
 
 # ------------------------------------------------------------------- data --
-# Kaggle mounts a dataset at /kaggle/input/<slug>/, but when the dataset was
-# built from notebook output the files can sit one level deeper. Search both,
-# and if nothing turns up, print the tree rather than just asserting — "not
-# found" is useless when you cannot see what *is* there.
-hits = (glob.glob("/kaggle/input/*/pl_train.bin")
-        + glob.glob("/kaggle/input/*/*/pl_train.bin")
-        + glob.glob("/kaggle/input/*/*/*/pl_train.bin"))
+# Kaggle's input mount depth isn't fixed (seen both /kaggle/input/<slug>/ and
+# /kaggle/input/datasets/<owner>/<slug>/ in practice) — recursive search finds
+# it regardless. If nothing turns up, print the tree rather than just
+# asserting — "not found" is useless when you cannot see what *is* there.
+hits = glob.glob("/kaggle/input/**/pl_train.bin", recursive=True)
 if not hits:
     print("pl_train.bin not found. /kaggle/input contains:")
     for root, dirs, files in os.walk("/kaggle/input"):
@@ -69,13 +67,21 @@ print(f"data: {data_dir}")
 
 # ------------------------------------------------------- resume if possible --
 os.makedirs(OUT, exist_ok=True)
-# Two possible dataset layouts: nested (dataset built from "Save Notebook
-# Output as Dataset" in the Kaggle UI, which preserves /kaggle/working/run/)
-# and flat (the orchestrate.py automation copies ckpt.pt/best.pt straight
-# into the dataset root, no run/ subfolder). Check both — a mismatch here
-# means "--resume" silently trains from scratch instead of failing loudly.
-prev = next((p for p in glob.glob("/kaggle/input/*/ckpt.pt")
-             + glob.glob("/kaggle/input/*/run/ckpt.pt")), None)
+# Kaggle's actual input mount depth has moved before (plain /kaggle/input/<slug>/
+# vs. /kaggle/input/datasets/<owner>/<slug>/ seen in practice) and a fixed-depth
+# glob silently finds nothing when it moves again — "--resume" then trains from
+# scratch with no error. Recursive search doesn't care how deep it's nested.
+hits_ckpt = sorted(glob.glob("/kaggle/input/**/ckpt.pt", recursive=True))
+if not hits_ckpt:
+    print("no ckpt.pt found under /kaggle/input — starting from scratch. tree:")
+    for root, dirs, files in os.walk("/kaggle/input"):
+        depth = root.count("/") - 2
+        if depth > 4:
+            continue
+        print("  " * depth + os.path.basename(root) + "/")
+        for f in sorted(files)[:12]:
+            print("  " * (depth + 1) + f)
+prev = hits_ckpt[0] if hits_ckpt else None
 resume = []
 if prev:
     shutil.copy(prev, f"{OUT}/ckpt.pt")
