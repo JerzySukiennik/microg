@@ -122,7 +122,7 @@ def main():
     cfg = GPTConfig()
     model = GPT(cfg).to(device)
 
-    ck = torch.load(args.init, map_location=device)
+    ck = torch.load(args.init, map_location=device, weights_only=False)
     model.load_state_dict(ck["model"])
     print(f"loaded base from {args.init} (pretrain step {ck.get('step','?')}, "
           f"val {ck.get('best_val', float('nan')):.4f})")
@@ -143,7 +143,7 @@ def main():
 
     step, best_val = 0, float("inf")
     if args.resume and (args.out / "ckpt.pt").exists():
-        rc = torch.load(args.out / "ckpt.pt", map_location=device)
+        rc = torch.load(args.out / "ckpt.pt", map_location=device, weights_only=False)
         model.load_state_dict(rc["model"]); opt.load_state_dict(rc["optimizer"])
         step, best_val = rc["step"], rc.get("best_val", float("inf"))
         print(f"resumed at step {step}")

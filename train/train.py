@@ -146,7 +146,10 @@ def save_ckpt(path: Path, model, opt, step, best_val, cfg, args):
 
 
 def load_ckpt(path: Path, model, opt, device):
-    ck = torch.load(path, map_location=device)
+    # weights_only=False: PyTorch 2.6 flipped the default, which then refuses
+    # to unpickle the plain pathlib.Path stored in ck["args"] below. This is
+    # our own checkpoint, not an untrusted download, so that's fine.
+    ck = torch.load(path, map_location=device, weights_only=False)
     core = model.module if hasattr(model, "module") else model
     core.load_state_dict(ck["model"])
     if opt is not None and "optimizer" in ck:
