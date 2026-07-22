@@ -9,6 +9,12 @@ Inputs: the checkpoint dataset from 02-train.py (must contain run/best.pt).
 
 Much shorter than pretraining — around 20 minutes. The model already knows
 Polish; this only teaches it the shape of a conversation.
+
+This file is documentation of intent, not what actually runs: run_finetune.py
+pushes Niepotrzebne/kaggle-orchestration/kernel-finetune/finetune_kernel.py
+as the kernel's code_file. The two are kept manually in sync — the same
+mismatch already cost a full pretraining cycle once (kaggle/02-train.py vs
+kernel/train_kernel.py, 2026-07-22).
 """
 
 import glob
@@ -32,8 +38,14 @@ os.chdir(f"{WORK}/microg")
 subprocess.run([sys.executable, "-m", "pip", "install", "-q", "datasets", "tokenizers"], check=True)
 
 # ------------------------------------------------------------------- base --
-base = next((p for p in glob.glob("/kaggle/input/*/run/best.pt")), None) \
-    or next((p for p in glob.glob("/kaggle/input/*/run/ckpt.pt")), None)
+# Kaggle's input mount depth isn't fixed (seen both /kaggle/input/<slug>/ and
+# /kaggle/input/datasets/<owner>/<slug>/ in practice, in the same session for
+# two different attached datasets) — recursive search finds it regardless of
+# depth, where a fixed-depth glob silently found nothing and the whole run
+# would fail this assert for a reason that looked like a missing dataset
+# rather than a path assumption.
+base = next(iter(sorted(glob.glob("/kaggle/input/**/best.pt", recursive=True))), None) \
+    or next(iter(sorted(glob.glob("/kaggle/input/**/ckpt.pt", recursive=True))), None)
 assert base, "no pretrained checkpoint in inputs — attach the 02-train output dataset"
 print(f"base model: {base}")
 
