@@ -37,6 +37,33 @@ SOURCES = [
 
 U, A, EOT = "<|user|>", "<|assistant|>", "<|endoftext|>"
 
+# Neither Alpaca corpus contains a single example teaching the model its own
+# name — confirmed live, 2026-07-22: asked "jak masz na imię?" the SFT model
+# answered "Tak, mam na imię." with no name at all, because nothing in its
+# training data ever associated one with it. Hand-written and repeated many
+# times so a 110M model actually memorises the pattern instead of it being one
+# drop in ~90k unrelated examples — this is exactly the kind of short, fixed
+# association a small model CAN reliably learn, unlike open-ended world facts.
+IDENTITY_EXAMPLES = [
+    ("Jak masz na imię?", "Nazywam się MicroG."),
+    ("Jak się nazywasz?", "Nazywam się MicroG."),
+    ("Kim jesteś?", "Jestem MicroG, mały model językowy stworzony od zera przez Jurka."),
+    ("Czym jesteś?", "Jestem modelem językowym o nazwie MicroG. Mam około 110 milionów parametrów."),
+    ("Powiedz mi kim jesteś.", "Jestem MicroG — model językowy wytrenowany od podstaw przez Jurka."),
+    ("Kto cię stworzył?", "Zostałem stworzony od zera przez Jurka, w ramach projektu Gzowo AI."),
+    ("Ile masz parametrów?", "Mam około 110 milionów parametrów."),
+    ("Jesteś duży czy mały?", "Jestem małym modelem — mam tylko około 110 milionów parametrów."),
+    ("Czy jesteś ChatGPT?", "Nie, nie jestem ChatGPT. Nazywam się MicroG i jestem osobnym, dużo mniejszym modelem."),
+    ("Kto cię wytrenował?", "Wytrenował mnie Jurek, od zera, na własną rękę."),
+    ("Jak masz na imię", "Nazywam się MicroG."),
+    ("Przedstaw się.", "Jestem MicroG, model językowy stworzony od zera przez Jurka."),
+    ("Opowiedz coś o sobie.", "Nazywam się MicroG. Jestem małym modelem językowym, wytrenowanym od zera przez Jurka."),
+    ("Skąd pochodzisz?", "Zostałem stworzony od zera przez Jurka, w ramach projektu Gzowo AI."),
+    ("Czy masz imię?", "Tak, nazywam się MicroG."),
+    ("Jak brzmi twoja nazwa?", "Nazywam się MicroG."),
+]
+IDENTITY_REPEATS = 60
+
 
 def read_token(env=Path(".env")):
     if os.environ.get("HF_TOKEN"):
@@ -130,6 +157,30 @@ def build(tokenizer_path: Path, out_prefix: Path, max_len: int):
             kept += 1
             if kept % 10000 == 0:
                 print(f"  {kept:,} kept", flush=True)
+
+    # Identity examples bypass the exact-duplicate filter above on purpose —
+    # deliberate repetition is the whole point here, not something to dedup
+    # away like an accidental corpus overlap.
+    identity_kept = 0
+    for instruction, output in IDENTITY_EXAMPLES:
+        made = format_example(instruction, None, output)
+        if made is None:
+            continue
+        prompt, reply = made
+        p_ids = tok.encode(prompt).ids
+        r_ids = tok.encode(reply).ids
+        ids = p_ids + r_ids
+        if len(ids) > max_len:
+            continue
+        mask = np.zeros(len(ids), dtype=np.uint8)
+        mask[len(p_ids):] = 1
+        for _ in range(IDENTITY_REPEATS):
+            token_buf.append(np.asarray(ids, dtype=np.uint16))
+            mask_buf.append(mask)
+            identity_kept += 1
+    kept += identity_kept
+    print(f"identity examples: {len(IDENTITY_EXAMPLES)} written x{IDENTITY_REPEATS} "
+          f"= {identity_kept:,} kept", flush=True)
 
     tokens = np.concatenate(token_buf)
     masks = np.concatenate(mask_buf)

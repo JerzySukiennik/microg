@@ -392,11 +392,20 @@ class GPT(nn.Module):
 
     @torch.no_grad()
     def generate(self, idx, max_new_tokens, temperature=0.8, top_k=50,
+                 repetition_penalty=1.3,
                  capture: Capture | None = None, use_cache: bool = True):
         """Sample tokens autoregressively, yielding (token_id, probs) each step.
 
         With use_cache the prompt is processed once in a single "prefill" pass,
         and every step after that feeds exactly one token.
+
+        A model this small has no real notion of "I already said this" — low
+        temperature/top_k make output more locally coherent but also more
+        likely to lock into a repeat loop ("Warszawa, Warszawa, Warszawa..."),
+        since nothing discourages a token that already looks probable from
+        winning again next step. repetition_penalty pushes already-seen
+        tokens' logits toward zero (CTRL-style: divide positive logits,
+        multiply negative ones) so the same choice doesn't keep re-winning.
         """
         self.eval()
         kv = KVCache(self.config.n_layer) if use_cache else None
@@ -408,6 +417,12 @@ class GPT(nn.Module):
         for _ in range(max_new_tokens):
             logits, _ = self(step_in, capture=capture, kv=kv)
             logits = logits[:, -1, :] / max(temperature, 1e-5)
+
+            if repetition_penalty != 1.0:
+                seen = torch.unique(idx[0])
+                seen_logits = logits[0, seen]
+                logits[0, seen] = torch.where(
+                    seen_logits > 0, seen_logits / repetition_penalty, seen_logits * repetition_penalty)
 
             if top_k is not None:
                 v, _ = torch.topk(logits, min(top_k, logits.size(-1)))
